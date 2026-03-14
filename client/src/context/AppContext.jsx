@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const AppContext = createContext();
 
@@ -23,8 +23,8 @@ export const AppProvider = ({children}) => {
 
     const [githubData, setGithubData] = useState(null)
 
-    const [weeklyReport, setWeeklyReport] = useState(
-        JSON.parse(localStorage.getItem('weeklyReports')) || []
+    const [weeklyProgress, setWeeklyProgress] = useState(
+        JSON.parse(localStorage.getItem('weeklyProgress')) || []
     )
 
     const [lastCompletedDate, setLastCompletedDate] = useState(
@@ -34,6 +34,41 @@ export const AppProvider = ({children}) => {
     const [streak, setStreak] = useState(
         parseInt(localStorage.getItem('streak')) || 0
     )
+
+    useEffect(() => {
+        if(roadmap.length>0){
+            const calculatedProgress = (completedSkills.length/roadmap.length)*100;
+            setProgress(Math.round(calculatedProgress))
+        }
+    },[completedSkills,roadmap])
+
+    useEffect(() => {
+        localStorage.setItem("selectedCareer",selectedCareer)
+    },[selectedCareer])
+
+    useEffect(() => {
+        localStorage.setItem("skillRatings",JSON.stringify(skillRatings))
+    },[skillRatings])
+
+    useEffect(() => {
+        localStorage.setItem("roadmap",JSON.stringify(roadmap))
+    },[roadmap])
+
+    useEffect(() => {
+        localStorage.setItem("streak",streak)
+    },[streak])
+
+    useEffect(() => {
+        localStorage.setItem("completedSkills",JSON.stringify(completedSkills))
+    },[completedSkills])
+
+    useEffect(() => {
+        localStorage.setItem("lastCompletedDate",lastCompletedDate)
+    },[lastCompletedDate])
+
+    useEffect(() => {
+        localStorage.setItem("weeklyProgress",JSON.stringify(weeklyProgress))
+    },[weeklyProgress])
 
     return(
         <AppContext.Provider 
@@ -51,8 +86,8 @@ export const AppProvider = ({children}) => {
             setProgress,
             completedSkills,
             setCompletedSkills,
-            weeklyReport,
-            setWeeklyReport,
+            weeklyProgress,
+            setWeeklyProgress,
             streak,
             setStreak,
             lastCompletedDate,
