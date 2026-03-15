@@ -1,8 +1,12 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
 const GithubAnalyzer = () => {
   return (
-    <div>GithubAnalyzer</div>
+    <div>
+      <Navbar/>
+      GithubAnalyzer
+    </div>
   )
 }
 

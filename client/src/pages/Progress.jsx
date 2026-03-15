@@ -1,8 +1,12 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
 const Progress = () => {
   return (
-    <div>Progress</div>
+    <div>
+      <Navbar/>
+      Progress
+    </div>
   )
 }
 

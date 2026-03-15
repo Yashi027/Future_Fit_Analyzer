@@ -1,8 +1,11 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
 const Roadmap = () => {
   return (
-    <div>Roadmap</div>
+    <div>
+      <Navbar/>
+    </div>
   )
 }
 

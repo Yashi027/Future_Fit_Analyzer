@@ -1,8 +1,12 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
 const SkillAnalysis = () => {
   return (
-    <div>SkillAnalysis</div>
+    <div>
+      <Navbar/>
+      SkillAnalysis
+    </div>
   )
 }
 
