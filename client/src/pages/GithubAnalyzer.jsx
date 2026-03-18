@@ -1,44 +1,36 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 
 const GithubAnalyzer = () => {
   const [username, setUsername] = useState("");
-  const [data, setData] = useState(null);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const fetchGithubData = async () => {
-    if (!username.trim()) {
-      setError("Please enter a username");
+  const {fetchGithubData, githubData} = useContext(AppContext);
+
+  const handleAnalyze = async () => {
+    if(!username.trim()){
+      setError("Please enter a github username.")
       return;
     }
-
+    setLoading(true);
+    setError("")
     try {
-      setLoading(true);
-      setError("");
-      setData(null);
-
-      const res = await fetch(`https://api.github.com/users/${username}`);
-      
-      if (!res.ok) {
-        throw new Error("User not found");
-      }
-
-      const result = await res.json();
-      setData(result);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      await fetchGithubData(username);
+    } catch (error) {
+      setError("Failed to fetch User.")
+    }finally{
+    setLoading(false);
     }
-  };
+  }
 
   return (
     <div className='min-h-screen bg-gray-50 px-6 py-10'>
       <div className='max-w-3xl mx-auto'>
         
-        <h1 className='text-3xl font-bold mb-6'>GitHub Analyzer</h1>
+        <h1 className='text-3xl font-bold mb-6'>GitHub Profile Analyzer</h1>
 
-        {/* Input Section */}
         <div className='flex gap-3 mb-6'>
           <input
             type="text"
@@ -48,64 +40,62 @@ const GithubAnalyzer = () => {
             className='flex-1 p-3 border rounded-md outline-none focus:ring-2 focus:ring-indigo-400'
           />
           <button
-            onClick={fetchGithubData}
+            onClick={handleAnalyze}
+            disabled={loading}
             className='bg-indigo-500 text-white px-5 py-2 rounded-md hover:bg-indigo-600 transition'
           >
-            Analyze
+            {loading ? 'Analyzing..' : 'Analyze'}
           </button>
         </div>
 
-        {/* Loading */}
-        {loading && <p className='text-gray-500'>Loading...</p>}
-
-        {/* Error */}
         {error && <p className='text-red-500'>{error}</p>}
 
-        {/* Result */}
-        {data && (
+        {githubData ? (
           <div className='bg-white p-6 rounded-xl shadow border'>
             <div className='flex items-center gap-4 mb-4'>
               <img
-                src={data.avatar_url}
+                src={githubData.avatar}
                 alt="avatar"
                 className='w-16 h-16 rounded-full'
               />
               <div>
-                <h2 className='text-xl font-semibold'>{data.name || "No Name"}</h2>
-                <p className='text-gray-500'>@{data.login}</p>
+                <h2 className='text-xl font-semibold'>{githubData.name || "User"}</h2>
+                <p className='text-gray-500'>Status: Developer</p>
               </div>
             </div>
 
             <p className='text-gray-700 mb-4'>
-              {data.bio || "No bio available"}
+              Score: {githubData.score}%
             </p>
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='bg-gray-100 p-3 rounded-md'>
                 <p className='text-sm text-gray-500'>Repositories</p>
-                <h3 className='text-lg font-semibold'>{data.public_repos}</h3>
+                <h3 className='text-lg font-semibold'>{githubData.repoCount}</h3>
               </div>
 
               <div className='bg-gray-100 p-3 rounded-md'>
                 <p className='text-sm text-gray-500'>Followers</p>
-                <h3 className='text-lg font-semibold'>{data.followers}</h3>
+                <h3 className='text-lg font-semibold'>{githubData.followers}</h3>
               </div>
 
               <div className='bg-gray-100 p-3 rounded-md'>
-                <p className='text-sm text-gray-500'>Following</p>
-                <h3 className='text-lg font-semibold'>{data.following}</h3>
+                <p className='text-sm text-gray-500'>Skill Rating</p>
+                <h3 className='text-lg font-semibold'>
+                  {githubData.score > 80 ? "Expert" : githubData.score > 50 ? "Intermediate" : "Beginner"}
+                </h3>
               </div>
 
               <div className='bg-gray-100 p-3 rounded-md'>
                 <p className='text-sm text-gray-500'>Location</p>
                 <h3 className='text-lg font-semibold'>
-                  {data.location || "N/A"}
+                  {githubData.location || "Not Specified"}
                 </h3>
               </div>
             </div>
 
             <a
-              href={data.html_url}
+              href={githubData.profile_url}
               target="_blank"
               rel="noreferrer"
               className='inline-block mt-4 text-indigo-500 hover:underline'
@@ -113,6 +103,8 @@ const GithubAnalyzer = () => {
               View Profile →
             </a>
           </div>
+        ):(
+          <div className='text-gray-800'> No GitHub Data Found.</div>
         )}
       </div>
     </div>

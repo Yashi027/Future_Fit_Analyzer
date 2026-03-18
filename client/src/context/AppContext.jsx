@@ -21,7 +21,9 @@ export const AppProvider = ({children}) => {
 
     const [progress, setProgress] = useState(0)
 
-    const [githubData, setGithubData] = useState(null)
+    const [githubData, setGithubData] = useState(
+        JSON.parse(localStorage.getItem('githubData')) || null
+    )
 
     const [weeklyProgress, setWeeklyProgress] = useState(
         JSON.parse(localStorage.getItem('weeklyProgress')) || []
@@ -41,6 +43,11 @@ export const AppProvider = ({children}) => {
             const repos = await fetch(`https://api.github.com/users/${username}/repos`)
             const userData = await res.json();
             const repoData = await repos.json();
+            if(!res.ok){
+                setGithubData(null);
+                localStorage.removeItem('githubData');
+                throw new Error('User Not Found')
+            }
             const score = (userData.public_repos * 2) + (userData.followers * 5);
 
             const summary={
@@ -48,7 +55,9 @@ export const AppProvider = ({children}) => {
                 avatar: userData.avatar_url,
                 repoCount: userData.public_repos,
                 followers: userData.followers,
-                score: Math.min(score,100)
+                score: Math.min(score,100),
+                profile_url: userData.html_url,
+                location: userData.location
             }
             setGithubData(summary)
             localStorage.setItem("githubData",JSON.stringify(summary));
@@ -79,7 +88,7 @@ export const AppProvider = ({children}) => {
         const diffTime = today-lastDate;
         const diffDays = Math.floor(diffTime/(1000*60*60*24));
 
-        if(today==lastCompletedDate){
+        if(todayString==lastCompletedDate){
             console.log("Streak Maintained")
         }else if(diffDays==1){
             setStreak(prev => prev+1);
@@ -186,7 +195,8 @@ export const AppProvider = ({children}) => {
             lastCompletedDate,
             setLastCompletedDate,
             completeSkill,
-            generateRoadmap
+            generateRoadmap,
+            fetchGithubData
         }
         }>
             {children}

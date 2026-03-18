@@ -7,11 +7,12 @@ const Roadmap = () => {
   const [filter,setFilter] = useState("all")
 
   const filteredSkills = roadmap.filter((skill) => {
+    const isDone = completedSkills.some(s => s.name === skill.name);
     if(filter==="completed"){
-      return completedSkills.includes(skill.name);
+      return isDone;
     }
     if(filter==="pending"){
-      return !completedSkills.includes(skill.name);
+      return !isDone;
     }
     return true;
   })
@@ -60,7 +61,7 @@ const Roadmap = () => {
             (<p className='text-gray-500'>No skills found.</p>):
             (
               filteredSkills.map((skill,index) => {
-                const isCompleted = completedSkills.includes(skill.name);
+                const isCompleted = completedSkills.some(s => s.name===skill.name);
 
                 return(
                   <div
