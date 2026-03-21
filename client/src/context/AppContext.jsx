@@ -157,7 +157,7 @@ export const AppProvider = ({ children }) => {
         const careerSkills = {
             frontend: ["HTML", "CSS", "JavaScript", "React", "Redux"],
             backend: ["Node.js", "Express", "MongoDB", "SQL", "API Design"],
-            fullstack: ["HTML", "CSS", "JavaScript", "React", "Node.js", "MongoDB"]
+            fullstack: ["HTML", "CSS", "JavaScript", "React", "Node.js", "MongoDb"]
         };
 
         const skills = careerSkills[selectedCareer] || [];
