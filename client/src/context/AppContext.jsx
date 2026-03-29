@@ -4,6 +4,10 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
 
+    const [currentGithubUser, setCurrentGithubUser] = useState(
+        localStorage.getItem("currentGithubUser") || null
+    );
+
     const [roadmap, setRoadmap] = useState(
         JSON.parse(localStorage.getItem('roadmap')) || []
     );
@@ -12,9 +16,11 @@ export const AppProvider = ({ children }) => {
         localStorage.getItem('selectedCareer') || ""
     );
 
-    const [skillRatings, setSkillRatings] = useState(
-        JSON.parse(localStorage.getItem('skillRatings')) || {}
-    );
+    const [skillRatings, setSkillRatings] = useState(() => {
+        const storedUser = localStorage.getItem("currentGithubUser");
+        if (!storedUser) return {};
+        return JSON.parse(localStorage.getItem(`skillRatings_${storedUser}`)) || {};
+    });
 
     const [progress, setProgress] = useState(0);
 
@@ -63,7 +69,7 @@ export const AppProvider = ({ children }) => {
                 "Java": "Java"
             };
 
-            const newRatings = { ...skillRatings };
+            const newRatings = {};
 
             Object.keys(language_counts).forEach(lang => {
                 const skillname = syncMap[lang];
@@ -82,7 +88,6 @@ export const AppProvider = ({ children }) => {
                 }
             });
 
-            setSkillRatings(newRatings);
 
             const summary = {
                 name: userData.name,
@@ -97,6 +102,22 @@ export const AppProvider = ({ children }) => {
 
             setGithubData(summary);
             localStorage.setItem("githubData", JSON.stringify(summary));
+            setCurrentGithubUser(username);
+            localStorage.setItem("currentGithubUser", username);
+
+            const existingRatings = JSON.parse(
+                localStorage.getItem(`skillRatings_${username}`)
+            );
+
+            if (existingRatings) {
+                setSkillRatings(existingRatings);
+            } else {
+                setSkillRatings(newRatings);
+                localStorage.setItem(
+                    `skillRatings_${username}`,
+                    JSON.stringify(newRatings)
+                );
+            }
 
         } catch (error) {
             console.log(`Error: ${error}`);
@@ -154,9 +175,24 @@ export const AppProvider = ({ children }) => {
     }, [selectedCareer]);
 
     useEffect(() => {
-        generateRoadmap();
-        localStorage.setItem("skillRatings", JSON.stringify(skillRatings));
-    }, [skillRatings]);
+        if (currentGithubUser) {
+            const stored = JSON.parse(
+                localStorage.getItem(`skillRatings_${currentGithubUser}`)
+            );
+            if (stored) {
+                setSkillRatings(stored);
+            }
+        }
+    }, [currentGithubUser]);
+
+    useEffect(() => {
+        if (currentGithubUser) {
+            localStorage.setItem(
+                `skillRatings_${currentGithubUser}`,
+                JSON.stringify(skillRatings)
+            );
+        }
+    }, [skillRatings, currentGithubUser]);
 
     useEffect(() => {
         localStorage.setItem("roadmap", JSON.stringify(roadmap));
@@ -182,13 +218,10 @@ export const AppProvider = ({ children }) => {
             setRoadmap,
             progress,
             setProgress,
-            // completedSkills,
-            // setCompletedSkills,
             weeklyProgress,
             setWeeklyProgress,
             streak,
             setStreak,
-            // toggleSkill,
             generateRoadmap,
             fetchGithubData
         }}>
