@@ -14,14 +14,14 @@ const SkillAnalysis = () => {
 
   const handleRatingChange = (skill, rating) => {
     const currentRating = skillRatings[skill] || 0;
-    if(rating <= currentRating){
+    if (rating <= currentRating) {
       setSkillRatings(prev => ({
         ...prev,
         [skill]: rating
       }));
       return;
     }
-    navigate('/quiz',{
+    navigate('/quiz', {
       state: {
         skill,
         rating
@@ -53,9 +53,9 @@ const SkillAnalysis = () => {
 
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             {
-              ['frontend','backend','fullstack'].map((role) => (
+              ['frontend', 'backend', 'fullstack'].map((role) => (
                 <button key={role} onClick={() => setSelectedCareer(role)}
-                className={`p-4 rounded-xl border-2 transition-all capitalize font-medium ${selectedCareer===role ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'text-gray-500 border-gray-100 bg-gray-50 hover:border-gray-300'}`}>
+                  className={`p-4 rounded-xl border-2 transition-all capitalize font-medium ${selectedCareer === role ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'text-gray-500 border-gray-100 bg-gray-50 hover:border-gray-300'}`}>
                   {role} Developer
                 </button>
               ))
@@ -77,10 +77,10 @@ const SkillAnalysis = () => {
                     <span className='font-semibold text-gray-700'>{skill}</span>
                     <div className='flex items-center gap-2'>
                       {
-                        [1,2,3,4,5].map((num) => (
-                          <button key={num} 
-                           onClick={() => handleRatingChange(skill,num)}
-                          className={`h-10 w-10 rounded-full transition-all ${skillRatings[skill]===num ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' : 'bg-white text-gray-600 border-gray-300 hover:border-indigo-400'}`}>
+                        [1, 2, 3, 4, 5].map((num) => (
+                          <button key={num}
+                            onClick={() => handleRatingChange(skill, num)}
+                            className={`h-10 w-10 rounded-full transition-all ${skillRatings[skill] === num ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' : 'bg-white text-gray-600 border-gray-300 hover:border-indigo-400'}`}>
                             {num}
                           </button>
                         ))
@@ -92,8 +92,8 @@ const SkillAnalysis = () => {
 
               <div className='mt-10 flex justify-center'>
                 <button onClick={() => handleGenerate()}
-                className='bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition shadow-lg hover:shadow-indigo-200'>
-                  Generate My Roadmap 
+                  className='bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition shadow-lg hover:shadow-indigo-200'>
+                  Generate My Roadmap
                 </button>
               </div>
             </div>

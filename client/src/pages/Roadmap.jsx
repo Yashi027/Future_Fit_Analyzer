@@ -3,14 +3,16 @@ import { AppContext } from '../context/AppContext';
 
 const Roadmap = () => {
 
-  const { roadmap, progress, streak, completedSkills, selectedCareer, toggleSkill } = useContext(AppContext);
+  const { roadmap, progress, streak, selectedCareer, skillRatings } = useContext(AppContext);
   const [filter, setFilter] = useState("all");
 
-  const completedSet = new Set(completedSkills.map(s => s.name));
-
-  const relevant = completedSkills.filter(cs =>
-    roadmap.some(r => r.name === cs.name)
+  const completedSet = new Set(
+    roadmap
+      .filter(skill => skillRatings[skill.name] === 5)
+      .map(skill => skill.name)
   );
+
+  const relevant = roadmap.filter(skill => skillRatings[skill.name] === 5);
 
   const filteredSkills = roadmap.filter((skill) => {
     const isDone = completedSet.has(skill.name);
@@ -38,16 +40,6 @@ const Roadmap = () => {
                 🔥 Learning Streak: <span className='font-semibold'>{streak}</span> days
               </p>
             </div>
-
-            <button
-              onClick={() => {
-                localStorage.removeItem("completedSkills");
-                window.location.reload();
-              }}
-              className='px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition'
-            >
-              Reset Progress
-            </button>
           </div>
         </div>
 
@@ -94,11 +86,10 @@ const Roadmap = () => {
               return (
                 <div
                   key={skill.name}
-                  className={`flex justify-between items-center p-5 rounded-xl border transition ${
-                    isCompleted
-                      ? 'bg-green-50 border-green-300'
-                      : 'bg-white border-gray-200 hover:shadow-md'
-                  }`}
+                  className={`flex justify-between items-center p-5 rounded-xl border transition ${isCompleted
+                    ? 'bg-green-50 border-green-300'
+                    : 'bg-white border-gray-200 hover:shadow-md'
+                    }`}
                 >
                   <div className='flex items-start gap-4'>
                     <div className={`w-4 h-4 mt-2 rounded-full ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}`}></div>
@@ -117,17 +108,14 @@ const Roadmap = () => {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => !isCompleted && toggleSkill(skill.name)}
-                    disabled={isCompleted}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition ${
-                      isCompleted
-                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        : 'bg-indigo-500 text-white hover:bg-indigo-600'
-                    }`}
+                  <div
+                    className={`px-4 py-2 rounded-md text-sm font-medium ${isCompleted
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-200 text-gray-600'
+                      }`}
                   >
-                    {isCompleted ? "Completed" : "Mark Complete"}
-                  </button>
+                    {isCompleted ? "Completed" : "Pending"}
+                  </div>
                 </div>
               );
             })
