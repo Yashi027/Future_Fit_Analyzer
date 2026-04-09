@@ -296,7 +296,217 @@ const Quiz = () => {
                 ],
                 answer: "useSelector"
             }
+        ],
+        Express: [
+            {
+                question: "Express.js is built on which platform?",
+                options: [
+                    "Django",
+                    "Node.js",
+                    "Spring",
+                    "Laravel"
+                ],
+                answer: "Node.js"
+            },
+            {
+                question: "Which method is used to start an Express server?",
+                options: [
+                    "app.start()",
+                    "app.listen()",
+                    "server.run()",
+                    "app.init()"
+                ],
+                answer: "app.listen()"
+            },
+            {
+                question: "What is the purpose of middleware in Express?",
+                options: [
+                    "To design UI",
+                    "To handle request-response cycle",
+                    "To store data",
+                    "To connect database"
+                ],
+                answer: "To handle request-response cycle"
+            },
+            {
+                question: "Which method handles GET requests in Express?",
+                options: [
+                    "app.post()",
+                    "app.put()",
+                    "app.get()",
+                    "app.delete()"
+                ],
+                answer: "app.get()"
+            },
+            {
+                question: "Which parameter is used to pass control to next middleware?",
+                options: [
+                    "req",
+                    "res",
+                    "next",
+                    "app"
+                ],
+                answer: "next"
+            }
+        ],
+        MongoDb: [
+            {
+                question: "MongoDB is a type of which database?",
+                options: [
+                    "Relational",
+                    "NoSQL",
+                    "Graph",
+                    "Hierarchical"
+                ],
+                answer: "NoSQL"
+            },
+            {
+                question: "Data in MongoDB is stored in the form of?",
+                options: [
+                    "Tables",
+                    "Rows",
+                    "Documents",
+                    "Columns"
+                ],
+                answer: "Documents"
+            },
+            {
+                question: "What is a collection in MongoDB?",
+                options: [
+                    "A single record",
+                    "A group of documents",
+                    "A database",
+                    "A column"
+                ],
+                answer: "A group of documents"
+            },
+            {
+                question: "Which command is used to insert data in MongoDB?",
+                options: [
+                    "add()",
+                    "insertOne()",
+                    "create()",
+                    "push()"
+                ],
+                answer: "insertOne()"
+            },
+            {
+                question: "Which field is automatically added to every MongoDB document?",
+                options: [
+                    "id",
+                    "_id",
+                    "primaryKey",
+                    "docId"
+                ],
+                answer: "_id"
+            }
+        ],
+        SQL: [
+            {
+                question: "What does SQL stand for?",
+                options: [
+                    "Structured Query Language",
+                    "Simple Query Language",
+                    "Standard Query Logic",
+                    "System Query Language"
+                ],
+                answer: "Structured Query Language"
+            },
+            {
+                question: "Which command is used to retrieve data from a database?",
+                options: [
+                    "GET",
+                    "SELECT",
+                    "FETCH",
+                    "RETRIEVE"
+                ],
+                answer: "SELECT"
+            },
+            {
+                question: "Which clause is used to filter records?",
+                options: [
+                    "ORDER BY",
+                    "GROUP BY",
+                    "WHERE",
+                    "HAVING"
+                ],
+                answer: "WHERE"
+            },
+            {
+                question: "Which SQL command is used to insert new data?",
+                options: [
+                    "ADD",
+                    "INSERT INTO",
+                    "PUT",
+                    "CREATE"
+                ],
+                answer: "INSERT INTO"
+            },
+            {
+                question: "Which key uniquely identifies each record in a table?",
+                options: [
+                    "Foreign Key",
+                    "Primary Key",
+                    "Unique Key",
+                    "Candidate Key"
+                ],
+                answer: "Primary Key"
+            }
+        ],
+        API_Design: [
+            {
+                question: "What does API stand for?",
+                options: [
+                    "Application Programming Interface",
+                    "Advanced Programming Integration",
+                    "Application Process Interface",
+                    "Automated Programming Interface"
+                ],
+                answer: "Application Programming Interface"
+            },
+            {
+                question: "Which HTTP method is used to retrieve data?",
+                options: [
+                    "POST",
+                    "GET",
+                    "PUT",
+                    "DELETE"
+                ],
+                answer: "GET"
+            },
+            {
+                question: "Which HTTP method is used to create new data?",
+                options: [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "DELETE"
+                ],
+                answer: "POST"
+            },
+            {
+                question: "What is a RESTful API?",
+                options: [
+                    "An API that uses only POST",
+                    "An API following REST principles",
+                    "An API for databases only",
+                    "An API without endpoints"
+                ],
+                answer: "An API following REST principles"
+            },
+            {
+                question: "Which format is most commonly used for API responses?",
+                options: [
+                    "XML",
+                    "HTML",
+                    "JSON",
+                    "CSV"
+                ],
+                answer: "JSON"
+            }
         ]
+        
+
     };
 
     const questions = quizQuestions[skill] || [];

@@ -131,7 +131,7 @@ export const AppProvider = ({ children }) => {
 
         const careerSkills = {
             frontend: ["HTML", "CSS", "JavaScript", "React", "Redux"],
-            backend: ["NodeJs", "Express", "MongoDb", "SQL", "API Design"],
+            backend: ["NodeJs", "Express", "MongoDb", "SQL", "API_Design"],
             fullstack: ["HTML", "CSS", "JavaScript", "React", "NodeJs", "MongoDb"]
         };
 
