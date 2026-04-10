@@ -29,7 +29,7 @@ const Navbar = ({open,setOpen}) => {
         onClick={() => navigate('/')}
         className="px-5 py-2 rounded-full bg-white text-blue-600 font-semibold shadow-md hover:bg-blue-100 hover:scale-105 transition-all duration-200"
       >
-        Home
+        Dashboard
       </button>
 
       <img src={profileIcon} alt="Profile" className='h-12 w-12' />
