@@ -2,21 +2,24 @@ import React, { useContext, useMemo } from 'react'
 import { AppContext } from '../context/AppContext'
 
 const Progress = () => {
-  const { roadmap, progress, streak, githubData, skillRatings } = useContext(AppContext);
+  const { roadmap, progress, streak, githubData, skillRatings, weeklyProgress } = useContext(AppContext);
 
   const weeklyData = useMemo(() => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const today = new Date();
 
-    const completedCount = roadmap.filter(
-      skill => skillRatings[skill.name] === 5
-    ).length;
-
-    return days.map((day, index) => ({
-      dayName: day,
-      count: index === today.getDay() ? completedCount : 0
-    }));
-  }, [roadmap, skillRatings]);
+    return weeklyProgress.map((count,index) => {
+      const date = new Date();
+      date.setDate(today.getDate() - (6-index));
+      const dayName = date.toLocaleDateString("en-US",{
+        weekday: "short"
+      });
+      return {
+        dayName,
+        count
+      };
+    })
+  }, [weeklyProgress]);
 
   const maxCompletions = Math.max(...weeklyData.map(d => d.count), 1)
 
@@ -70,7 +73,7 @@ const Progress = () => {
               })
             }
           </div>
-          <p className='text-sm text-gray-800 mt-3'>Weekly Skill Completion trend</p>
+          <p className='text-sm text-gray-800 mt-3'>Daily public GitHub commits in last 7 days</p>
         </div>
 
         <div className='bg-white p-6 rounded-xl shadow'>

@@ -40,9 +40,31 @@ export const AppProvider = ({ children }) => {
         try {
             const res = await fetch(`https://api.github.com/users/${username}`);
             const repos = await fetch(`https://api.github.com/users/${username}/repos`);
+            const eventsRes = await fetch(`https://api.github.com/users/${username}/events/public`);
 
+            const eventsData = await eventsRes.json();
             const userData = await res.json();
             const repoData = await repos.json();
+
+            const last7days = Array(7).fill(0);
+            if (eventsRes.ok && Array.isArray(eventsData)){
+            eventsData.forEach(event => {
+                if (event.type === "PushEvent") {
+                    const eventDate = new Date(event.created_at);
+                    const today = new Date();
+
+                    const diffTime = today.getTime() - eventDate.getTime();
+
+                    const diffDays = Math.floor(
+                        diffTime / (1000 * 60 * 60 * 24)
+                    );
+
+                    if (diffDays >= 0 && diffDays < 7) {
+                        last7days[6 - diffDays] += event.payload.commits?.length || 1;
+                    }
+                }
+            });
+        }
 
             if (!res.ok || !repos.ok) {
                 setGithubData(null);
@@ -100,6 +122,7 @@ export const AppProvider = ({ children }) => {
                 languages: language_counts
             };
 
+            setWeeklyProgress(last7days);
             setGithubData(summary);
             localStorage.setItem("githubData", JSON.stringify(summary));
             setCurrentGithubUser(username);
@@ -118,6 +141,7 @@ export const AppProvider = ({ children }) => {
                     JSON.stringify(newRatings)
                 );
             }
+            updateStreak();
 
         } catch (error) {
             console.log(`Error: ${error}`);
@@ -154,6 +178,35 @@ export const AppProvider = ({ children }) => {
 
         setRoadmap(generated);
         localStorage.setItem('roadmap', JSON.stringify(generated));
+    };
+
+    const updateStreak = () => {
+        const today = new Date().toDateString();
+
+        const lastDate = localStorage.getItem("lastActiveDate");
+
+        if (!lastDate) {
+            setStreak(1);
+            localStorage.setItem("lastActiveDate", today);
+            return;
+        }
+
+        const prev = new Date(lastDate);
+        const curr = new Date(today);
+
+        const diffDays = Math.floor(
+            (curr - prev) / (1000 * 60 * 60 * 24)
+        );
+
+        if (diffDays === 0) return;
+
+        if (diffDays === 1) {
+            setStreak(prev => prev + 1);
+        } else {
+            setStreak(1);
+        }
+
+        localStorage.setItem("lastActiveDate", today);
     };
 
     useEffect(() => {

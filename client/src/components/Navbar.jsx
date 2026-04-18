@@ -15,7 +15,7 @@ const Navbar = () => {
         <span className="text-blue-600">Gap</span>
       </div>
 
-      <nav className="hidden lg:flex items-center gap-3">
+      <nav className="flex items-center gap-3">
         <Link
           to="/analysis"
           className="px-4 py-2 rounded-xl text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition">
